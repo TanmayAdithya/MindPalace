@@ -2,7 +2,7 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { formatDate } from '../../utils';
+import ArticleCard from '../../components/ArticleCard.astro';
 
 const allBlogArticles: CollectionEntry<'blog'>[] = (
   await getCollection('blog')
@@ -16,42 +16,7 @@ const allBlogArticles: CollectionEntry<'blog'>[] = (
   <h1 class="text-2xl pb-3">All Articles</h1>
   <!-- Main Grid -->
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-    {
-      allBlogArticles.map((blog) => (
-        <div class="max-w-md mx-auto mt-10">
-          <div class="bg-white rounded-lg overflow-hidden shadow-lg">
-            <a href={'/articles/' + blog.slug}>
-              <img
-                src={'/images/' + blog.data.image}
-                alt="Article Image"
-                class="w-full h-48 object-cover hover:opacity-75 transition duration-300 ease-in-out"
-              />
-            </a>
-            <div class="p-6">
-              <h2 class="text-2xl font-semibold mb-2">
-                <a href={'/articles/' + blog.slug}>{blog.data.title}</a>
-              </h2>
-              <p class="text-gray-600 text-sm mb-4">
-                {formatDate(blog.data.pubDate)}
-              </p>
-              <div class="flex flex-wrap gap-2">
-                {blog.data.tags.map((tag: string, index: number) => (
-                  <span
-                    class={
-                      index % 2 === 0
-                        ? 'px-2 py-1 bg-blue-500 text-white rounded-full text-xs hover:opacity-90'
-                        : 'px-2 py-1 bg-indigo-500 text-white rounded-full text-xs hover:opacity-90'
-                    }
-                  >
-                    <a href={'/articles/' + tag}>{tag}</a>
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      ))
-    }
+    {allBlogArticles.map((blog) => <ArticleCard blog={blog} />)}
   </div>
   <!-- Pagination -->
   <div class="flex justify-between mt-10">
